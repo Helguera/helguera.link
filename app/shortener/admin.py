@@ -5,13 +5,13 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from core import models
+from shortener import models
 
 
 class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users"""
     ordering = ['id']
-    list_display = ['email']
+    list_display = ['email', 'is_active', 'is_staff', 'is_superuser']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (
@@ -42,4 +42,11 @@ class UserAdmin(BaseUserAdmin):
     )
 
 
+class LinkAdmin(admin.ModelAdmin):
+    list_display = ('original_url', 'short_url', 'user', 'created_at')
+    search_fields = ('original_url', 'short_url')
+    list_filter = ('created_at', 'user')
+
+
 admin.site.register(models.User, UserAdmin)
+admin.site.register(models.Link, LinkAdmin)
