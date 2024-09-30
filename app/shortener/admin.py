@@ -43,10 +43,15 @@ class UserAdmin(BaseUserAdmin):
 
 
 class LinkAdmin(admin.ModelAdmin):
-    list_display = ('original_url', 'short_url', 'user', 'created_at')
+    list_display = ('id', 'original_url', 'full_short_url', 'times_accessed', 'user', 'created_at')
     search_fields = ('original_url', 'short_url')
     list_filter = ('created_at', 'user')
+    exclude = ('short_url', 'times_accessed')
 
+    def full_short_url(self, obj):
+        return 'https://helguera.link/{}'.format(obj.short_url)
+    
+    full_short_url.short_description = 'Short URL'
 
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Link, LinkAdmin)

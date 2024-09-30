@@ -21,7 +21,11 @@ from drf_spectacular.views import (
 from django.contrib import admin
 from django.urls import path, include
 
+from link.views import redirect_to_original
+
+
 urlpatterns = [
+    # path('', )
     path('admin/', admin.site.urls),
     path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
     path(
@@ -29,5 +33,7 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name='api-schema'),
         name='api-docs'
     ),
-    path('api/user/', include('user.urls'))
+    path('api/user/', include('user.urls')),
+    path('api/link/', include('link.urls')),
+    path('<str:short_url>/', redirect_to_original, name='redirect')
 ]
